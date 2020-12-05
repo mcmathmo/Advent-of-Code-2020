@@ -5,9 +5,9 @@ def get_id(code):
     ltr = code[7:]
     row, column = 0, 0
     for i in range(7):
-        row += (2**(6-i))*(ftb[i]=='B')
+        row += (2**(6-i))*(ftb[i] == 'B')
     for k in range(3):
-        column += (2**(2-k))*(ltr[k]=='R')
+        column += (2**(2-k))*(ltr[k] == 'R')
     return 8*row + column
 
 
@@ -40,7 +40,7 @@ def test(day, targetvals):
 
 if __name__ == "__main__":
     day = 5
-    testvals = [820,None]
+    testvals = [820, None]
     if test(day, testvals):
         with open("day" + str(day) + "_input.txt") as input_file:
             read_data = input_file.read()
