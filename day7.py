@@ -1,3 +1,5 @@
+from time import perf_counter
+
 
 def init_bag_map(line_list):
     mapdict = dict()
@@ -85,8 +87,11 @@ def main():
             read_data = input_file.read()
             line_list = read_data.split('\n')
         for i, _ in enumerate(testvals):
+            tic = perf_counter()
             output = get_result(line_list, i+1)
+            toc = perf_counter()
             print(f'Part {i+1}: {output}')
+            print(f'This took {toc-tic:0.7f} seconds')
 
 
 if __name__ == "__main__":
