@@ -3,11 +3,11 @@ def init_bag_map(line_list):
     mapdict = dict()
     for line in line_list:
         splitline = line.split()
-        key = ''.join([splitline[0], ' ', splitline[1]])
+        key = ' '.join(splitline[:2])
         mapdict[key] = set()
         for idx, val in enumerate(splitline[3:]):
             if val[:3] == 'bag':
-                newbag = ''.join([splitline[idx+1], ' ', splitline[idx+2]])
+                newbag = ' '.join(splitline[idx+1:idx+3])
                 mapdict[key].add(newbag)
     return mapdict
 
@@ -40,12 +40,12 @@ def init_bag_multmap(line_list):
     mapdict = dict()
     for line in line_list:
         splitline = line.split()
-        key = ''.join([splitline[0], ' ', splitline[1]])
+        key = ' '.join(splitline[:2])
         mapdict[key] = set()
         for idx, val in enumerate(splitline[3:]):
             if val[:3] == 'bag':
                 newbag = (splitline[idx],
-                          ''.join([splitline[idx+1], ' ', splitline[idx+2]]))
+                          ' '.join(splitline[idx+1:idx+3]))
                 mapdict[key].add(newbag)
     return mapdict
 
