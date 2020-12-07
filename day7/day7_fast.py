@@ -52,13 +52,13 @@ def init_bag_multmap(line_list):
     return mapdict
 
 
-def bags_contained(curbag):
+def bags_contained(bag_map, curbag, cache):
     if curbag in cache:
         return cache[curbag]
     if ('contain', 'no other') in bag_map[curbag[1]]:
         cache[curbag[1]] = 0
         return 0
-    result = sum((int(bag[0])*(bags_contained(bag)+1)
+    result = sum((int(bag[0])*(bags_contained(bag_map, bag, cache)+1)
                   for bag in bag_map[curbag[1]]))
     cache[curbag] = result
     return result
@@ -69,11 +69,9 @@ def get_result(line_list, part):
         return len(find_outer_bags(invert_map(init_bag_map(line_list)),
                                    'shiny gold'))
     if part == 2:
-        global bag_map
-        global cache
         bag_map = init_bag_multmap(line_list)
         cache = dict()
-        return bags_contained((1, 'shiny gold'))
+        return bags_contained(bag_map,(1, 'shiny gold'), cache)
 
 
 def main():
