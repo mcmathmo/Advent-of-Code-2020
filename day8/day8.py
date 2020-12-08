@@ -27,7 +27,7 @@ def correct_code(line_list):
         # Store changeable instructions in a set
         if line_list[idx][:3] != 'acc':
             switch_idx.add(idx)
-    # Try changing jmp instructions first
+    # Go through each jmp or nop instruction seen and try switching it
     while switch_idx:
         change_idx = switch_idx.pop()
         # Switch instruction
@@ -42,7 +42,7 @@ def correct_code(line_list):
             # Check if finished
             if i == maxi:
                 return accum
-            if line_list[i][:3] == 'acc':
+            elif line_list[i][:3] == 'acc':
                 i_visited.add(i)
                 accum += int(line_list[i].split()[-1])
                 i += 1
@@ -54,7 +54,6 @@ def correct_code(line_list):
                 i += 1
         # Revert changed instruction
         line_list[change_idx] = line_list[change_idx].replace(*switch[::-1])
-    print('Never terminated')
 
 
 def get_result(line_list, part):
