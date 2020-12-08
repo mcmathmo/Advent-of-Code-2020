@@ -17,24 +17,24 @@ def process_code(line_list):
         elif line_list[i][:3] == 'nop':
             i_visited.add(i)
             i += 1
-    return accum, i_visited
+    return accum, (i_visited, accum)
 
 
 def correct_code(line_list):
     maxi = len(line_list)
-    jmp_idx = set()
-    nop_idx = set()
-    for idx in process_code(line_list)[1]:
+    switch_idx = set()
+    for idx in process_code(line_list)[1][0]:
         # Store changeable instructions in a set
-        if line_list[idx][:3] == 'jmp':
-            jmp_idx.add(idx)
-        elif line_list[idx][:3] == 'nop':
-            nop_idx.add(idx)
+        if line_list[idx][:3] != 'acc':
+            switch_idx.add(idx)
     # Try changing jmp instructions first
-    while jmp_idx:
-        change_idx = jmp_idx.pop()
-        # Change jmp instruction to nop
-        line_list[change_idx] = line_list[change_idx].replace('jmp', 'nop')
+    while switch_idx:
+        change_idx = switch_idx.pop()
+        # Switch instruction
+        switch = ('jmp', 'nop')
+        if line_list[change_idx][:3] == 'nop':
+            switch = switch[::-1]
+        line_list[change_idx] = line_list[change_idx].replace(*switch)
         i = 0
         accum = 0
         i_visited = set()
@@ -53,32 +53,7 @@ def correct_code(line_list):
                 i_visited.add(i)
                 i += 1
         # Revert changed instruction
-        line_list[change_idx] = line_list[change_idx].replace('nop', 'jmp')
-
-    # Try changing nop instructions next
-    while nop_idx:
-        change_idx = nop_idx.pop()
-        # Change nop instruction to jump
-        line_list[change_idx] = line_list[change_idx].replace('nop', 'jmp')
-        i = 0
-        accum = 0
-        i_visited = set()
-        while i not in i_visited:
-            # Check if finished
-            if i == maxi:
-                return accum
-            if line_list[i][:3] == 'acc':
-                i_visited.add(i)
-                accum += int(line_list[i].split()[-1])
-                i += 1
-            elif line_list[i][:3] == 'jmp':
-                i_visited.add(i)
-                i += int(line_list[i].split()[-1])
-            elif line_list[i][:3] == 'nop':
-                i_visited.add(i)
-                i += 1
-        # Revert changed instruction
-        line_list[change_idx] = line_list[change_idx].replace('jmp', 'nop')
+        line_list[change_idx] = line_list[change_idx].replace(*switch[::-1])
     print('Never terminated')
 
 
