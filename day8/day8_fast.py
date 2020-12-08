@@ -20,47 +20,60 @@ def process_code(line_list):
     return accum, (i_visited, accum)
 
 
-def correct_code(line_list):
-    maxi = len(line_list)
-    switch_idx = set()
-    for idx in process_code(line_list)[1][0]:
-        # Store changeable instructions in a set
-        if line_list[idx][:3] != 'acc':
-            switch_idx.add(idx)
-    # Go through each jmp or nop instruction seen and try switching it
-    while switch_idx:
-        change_idx = switch_idx.pop()
-        # Switch instruction
-        switch = ('jmp', 'nop')
-        if line_list[change_idx][:3] == 'nop':
-            switch = switch[::-1]
-        line_list[change_idx] = line_list[change_idx].replace(*switch)
-        i = 0
-        accum = 0
-        i_visited = set()
-        while i not in i_visited:
-            # Check if finished
-            if i == maxi:
-                return accum
-            elif line_list[i][:3] == 'acc':
-                i_visited.add(i)
-                accum += int(line_list[i].split()[-1])
-                i += 1
-            elif line_list[i][:3] == 'jmp':
-                i_visited.add(i)
-                i += int(line_list[i].split()[-1])
-            elif line_list[i][:3] == 'nop':
-                i_visited.add(i)
-                i += 1
-        # Revert changed instruction
-        line_list[change_idx] = line_list[change_idx].replace(*switch[::-1])
+def correct_code_fast(line_list):
+    maxidx = len(line_list)
+    idx = 0
+    oldidx = 0
+    oldaccum = 0
+    switched = False
+    accum = 0
+    while idx < maxidx:
+        # something weird happening around idx 479, gets caught in loop
+        if idx == 479:
+            print('idx 479')
+        if line_list[idx] == 'seen':
+            idx = oldidx
+            accum = oldaccum
+            switched = False
+        elif line_list[idx][:3] == 'acc':
+            accum += int(line_list[idx].split()[-1])
+            line_list[idx] = 'seen'
+            idx += 1
+        elif line_list[idx][:3] == 'jmp':
+            jump = int(line_list[idx].split()[-1])
+            line_list[idx] = 'seen'
+            if switched:
+                idx += jump
+            else:
+                switched = True
+                oldidx = idx + jump
+                if oldidx == 479:
+                    print('479')
+                oldaccum = accum
+                idx += 1
+        elif line_list[idx][:3] == 'nop':
+            jump = int(line_list[idx].split()[-1])
+            line_list[idx] = 'seen'
+            if switched:
+                idx += 1
+            else:
+                switched = True
+                oldidx = idx + 1
+                oldaccum = accum
+                idx += jump
+        else:
+            print('weird')
+            print(f'idx is {idx}')
+            print(line_list[idx])
+
+    return accum
 
 
 def get_result(line_list, part):
     if part == 1:
         return process_code(line_list)[0]
     if part == 2:
-        return correct_code(line_list)
+        return correct_code_fast(line_list)
 
 
 def test(day, targetvals):
@@ -70,7 +83,7 @@ def test(day, targetvals):
         line_list = read_data.split('\n')
     resultvals = [0 for _ in range(len(targetvals))]
     for i, _ in enumerate(targetvals):
-        resultvals[i] = get_result(line_list, i + 1)
+        resultvals[i] = get_result(line_list, i+1)
         if resultvals[i] != testvals[i]:
             print(f'Test part {i+1} fails: expected '
                   f'{testvals[i]} but got {resultvals[i]}')
@@ -86,7 +99,7 @@ def main():
             line_list = read_data.split('\n')
         for i, _ in enumerate(testvals):
             tic = perf_counter()
-            output = get_result(line_list, i + 1)
+            output = get_result(line_list, i+1)
             toc = perf_counter()
             print(f'Part {i+1}: {output}')
             print(f'This took {toc-tic:0.7f} seconds')
