@@ -17,18 +17,18 @@ def process_code(line_list):
         elif line_list[i][:3] == 'nop':
             i_visited.add(i)
             i += 1
-    return accum
+    return accum, i_visited
 
 
 def correct_code(line_list):
     maxi = len(line_list)
     jmp_idx = set()
     nop_idx = set()
-    for idx, instruction in enumerate(line_list):
+    for idx in process_code(line_list)[1]:
         # Store changeable instructions in a set
-        if instruction[:3] == 'jmp':
+        if line_list[idx][:3] == 'jmp':
             jmp_idx.add(idx)
-        elif instruction[:3] == 'nop':
+        elif line_list[idx][:3] == 'nop':
             nop_idx.add(idx)
     # Try changing jmp instructions first
     while jmp_idx:
@@ -84,7 +84,7 @@ def correct_code(line_list):
 
 def get_result(line_list, part):
     if part == 1:
-        return process_code(line_list)
+        return process_code(line_list)[0]
     if part == 2:
         return correct_code(line_list)
 
