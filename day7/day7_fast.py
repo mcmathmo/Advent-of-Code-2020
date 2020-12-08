@@ -71,7 +71,7 @@ def get_result(line_list, part):
     if part == 2:
         bag_map = init_bag_multmap(line_list)
         cache = dict()
-        return bags_contained(bag_map,(1, 'shiny gold'), cache)
+        return bags_contained(bag_map, (1, 'shiny gold'), cache)
 
 
 def main():
