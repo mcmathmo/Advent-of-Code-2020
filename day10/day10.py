@@ -3,7 +3,7 @@ from time import perf_counter
 
 
 def joltage(intlist):
-    diffs = np.append(np.diff(intlist),[3])
+    diffs = np.append(np.diff(intlist), [3])
     sol = sum(diffs == 1) * (sum(diffs == 3))
     return sol, diffs
 
@@ -12,7 +12,7 @@ def arrangements(diffs):
     dplist = [1 for _ in diffs]
     rdiffs = diffs[::-1]
     dplist[2] = 2 if sum(rdiffs[1:3]) <= 3 else 1
-    for i in range(3,len(rdiffs)):
+    for i in range(3, len(rdiffs)):
         if sum(rdiffs[i-2:i+1]) == 3:
             dplist[i] = sum(dplist[i-3:i])
         elif sum(rdiffs[i-1:i+1]) <= 3:
