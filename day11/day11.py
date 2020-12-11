@@ -6,8 +6,8 @@ def adjacents(seats, x, y, n, m):
                   (x, y-1),             (x, y+1),
                   (x+1, y-1), (x+1, y), (x+1, y+1))
     # Count adjacent occupied seats
-    return sum([seats[i][j] == 2 for i, j in checkseats
-                if 0 <= i < n and 0 <= j < m])
+    return sum((seats[i][j] == 2 for i, j in checkseats
+                if 0 <= i < n and 0 <= j < m))
 
 
 def adj_view(seats, x, y, n, m):
