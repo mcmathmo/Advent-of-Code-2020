@@ -61,7 +61,7 @@ def two_step_seating(seat_plan, n, m):
     return new_seat_plan
 
 
-def end_seating(line_list, part):
+def get_result(line_list, part):
     n = len(line_list)
     m = len(line_list[0])
     old_seating = []
@@ -79,13 +79,6 @@ def end_seating(line_list, part):
             new_seating = two_step_seating(old_seating, n, m)
 
     return sum([line.count(2) for line in new_seating])
-
-
-def get_result(line_list, part):
-    if part == 1:
-        return end_seating(line_list, part)
-    if part == 2:
-        return end_seating(line_list, part)
 
 
 def test(day, targetvals):
