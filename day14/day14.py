@@ -11,7 +11,7 @@ def mask(value, bitmask):
 
 def keymask(ikey, bitmask, keys, lasti=0):
     # value as binary string
-    for i in range(lasti+1, len(bitmask)):
+    for i in range(lasti+1, 38):
         if bitmask[i] == '1':
             ikey |= 2**(37-i)
         elif bitmask[i] == 'X':
