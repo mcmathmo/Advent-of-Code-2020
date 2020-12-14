@@ -9,16 +9,14 @@ def mask(value, bitmask):
     return value
 
 
-def keymask(ikey, bitmask, lasti=0, keys=None):
-    if lasti == 0:
-        keys = set()
+def keymask(ikey, bitmask, keys, lasti=0):
     # value as binary string
     for i in range(lasti+1, len(bitmask)):
         if bitmask[i] == '1':
-            ikey = ikey[:i] + '1' + ikey[i+1:]
+            ikey = format(int(ikey, 2) | 2**(38-i), '#038b')
         elif bitmask[i] == 'X':
-            keys.union(keymask(ikey[:i] + '1' + ikey[i+1:], bitmask, i, keys))
-            keys.union(keymask(ikey[:i] + '0' + ikey[i+1:], bitmask, i, keys))
+            keys = keymask(ikey[:i] + '1' + ikey[i+1:], bitmask, keys, i)
+            keys = keymask(ikey[:i] + '0' + ikey[i+1:], bitmask, keys, i)
     keys.add(ikey)
     return keys
 
@@ -49,7 +47,7 @@ class Addr_decoder:
 
     def update_mem(self, ikey, value):
         ikey = format(ikey, '#038b')
-        for key in keymask(ikey, self.mask):
+        for key in keymask(ikey, self.mask, set()):
             self.memory[int(key, 2)] = value
 
     def update_mask(self, bitmask):
