@@ -13,10 +13,10 @@ def keymask(ikey, bitmask, keys, lasti=0):
     # value as binary string
     for i in range(lasti+1, 38):
         if bitmask[i] == '1':
-            ikey |= 2**(37-i)
+            ikey |= 1 << 37-i
         elif bitmask[i] == 'X':
-            keys = keymask(ikey | 2**(37-i), bitmask, keys, i)
-            keys = keymask(ikey & ~2**(37-i), bitmask, keys, i)
+            keys = keymask(ikey | 1 << 37-i, bitmask, keys, i)
+            keys = keymask(ikey & ~(1 << 37-i), bitmask, keys, i)
     keys.add(ikey)
     return keys
 
