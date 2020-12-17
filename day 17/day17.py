@@ -25,7 +25,6 @@ class ConwayCube:
             if self.cube[tuple(pos+vec)]:
                 tot += 1
                 if tot == 4:
-                    print('fast fail')
                     return 4
         return tot
 
