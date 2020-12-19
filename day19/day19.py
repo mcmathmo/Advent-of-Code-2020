@@ -33,20 +33,13 @@ class Rulechecker:
         return ''.join(['(', '|'.join(regx_list), ')'])
 
 
-def find_valid(line_list, part):
+def get_result(line_list, part):
     rules, msgs = line_list
     rule_list = rules.split('\n')
     msg_list = msgs.split('\n')
     checker = Rulechecker(rule_list, part)
     regx = re.compile(''.join(['^', checker.gen_regex(0, 0), '$']))
     return sum((bool(regx.match(msg)) for msg in msg_list))
-
-
-def get_result(line_list, part):
-    if part == 1:
-        return find_valid(line_list, part)
-    elif part == 2:
-        return find_valid(line_list, part)
 
 
 def test(day, targetvals):
