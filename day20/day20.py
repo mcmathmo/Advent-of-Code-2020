@@ -250,4 +250,3 @@ if __name__ == "__main__":
     day = 20
     testvals = [20899048083289, 273]
     main()
-
