@@ -20,7 +20,7 @@ class Rulechecker:
 
     def gen_regex(self, rulenum, depth):
         if depth > 14:
-            return ''
+            return 'z'
         rule = self.rules[rulenum]
         if rule in ['a', 'b']:
             return rule
