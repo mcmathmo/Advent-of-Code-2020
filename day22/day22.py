@@ -1,14 +1,17 @@
 from time import perf_counter
+from collections import deque
 
 
 def combat(p1, p2):
+    p1 = deque(p1)
+    p2 = deque(p2)
     while p1 and p2:
-        p1_card = p1.pop(0)
-        p2_card = p2.pop(0)
+        p1_card = p1.popleft()
+        p2_card = p2.popleft()
         if p1_card > p2_card:
-            p1.extend([p1_card, p2_card])
+            p1.extend((p1_card, p2_card))
         else:
-            p2.extend([p2_card, p1_card])
+            p2.extend((p2_card, p1_card))
     return p1 + p2
 
 
@@ -26,14 +29,14 @@ def rec_combat(p1, p2):
         p2_card = p2.pop(0)
         if len(p1) >= p1_card and len(p2) >= p2_card:
             if rec_combat(p1[:p1_card], p2[:p2_card])[0]:
-                p1.extend([p1_card, p2_card])
+                p1.extend((p1_card, p2_card))
             else:
-                p2.extend([p2_card, p1_card])
+                p2.extend((p2_card, p1_card))
         else:
             if p1_card > p2_card:
-                p1.extend([p1_card, p2_card])
+                p1.extend((p1_card, p2_card))
             else:
-                p2.extend([p2_card, p1_card])
+                p2.extend((p2_card, p1_card))
     return bool(p1), p1 + p2
 
 
